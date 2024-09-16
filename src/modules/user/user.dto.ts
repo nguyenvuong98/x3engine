@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {IsOptional, IsString, IsEmail, IsNotEmpty, IsEnum} from 'class-validator'
+import {IsOptional, IsString, IsEmail, IsNotEmpty, IsEnum, MinLength} from 'class-validator'
 import { UserRole, UserStatus } from './user.interface';
 
 export class UserDto {
@@ -30,7 +30,7 @@ export class UserDto {
     @IsOptional()
     @IsEnum(UserStatus)
     @ApiProperty({
-        type: UserStatus,
+        enum: UserStatus,
         description: 'status',
       })
     status: UserStatus;
@@ -38,7 +38,7 @@ export class UserDto {
     @IsOptional()
     @IsEnum(UserRole)
     @ApiProperty({
-        type: UserRole,
+        enum: UserRole,
         description: 'role',
       })
     role: UserRole;
@@ -83,13 +83,14 @@ export class UserDto {
 
     @ApiProperty({
         type: Number,
-        description: 'createdAt',
+        description: 'updatedAt',
       })
     updatedAt: Number;
 }
 
 export class UserRegiterRequestDdto {
-    @IsOptional()
+    @IsNotEmpty({message:'username must be not empty'})
+    //@IsOptional()
     @IsString()
     @ApiProperty({
         type: String,
@@ -97,15 +98,16 @@ export class UserRegiterRequestDdto {
       })
     username: string;
 
-    @IsOptional()
     @IsString()
+    @IsNotEmpty({message:'password must be not empty'})
+    @MinLength(8)
     @ApiProperty({
         type: String,
         description: 'password',
       })
     password: string;
 
-    @IsOptional()
+    @IsNotEmpty({message:'email must be not empty'})
     @IsEmail()
     @ApiProperty({
         type: String,
@@ -113,10 +115,9 @@ export class UserRegiterRequestDdto {
       })
     email: string;
 
-    @IsOptional()
     @IsEnum(UserRole)
     @ApiProperty({
-        type: UserRole,
+        enum: UserRole,
         description: 'role',
       })
     role: UserRole;

@@ -6,11 +6,15 @@ import { UserService } from '../user/user.service';
 import { ComparePassword, jwtExpireTime } from './auth.constants';
 import { SignIdRequestDto } from './auth.dto';
 import { UserStatus } from '../user/user.interface';
+import { USER_PICK_KEYS } from '../user/user.constants';
+import * as _ from 'lodash'
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly userService: UserService,
-        @Inject(CACHE_MANAGER) private cacheManager: Cache) {
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        private configService: ConfigService) {
         
     }
 
@@ -21,6 +25,7 @@ export class AuthService {
             throw new UnauthorizedException();
         }
 
+        const userObject = user.toObject()
         const mathPassword = await ComparePassword(request.password, user.passwordHash)
 
         if (!mathPassword) {
@@ -28,9 +33,10 @@ export class AuthService {
         }
 
         const accessToken = await this.userService.createToken(user)
-        const response = {id: user._id.toString(), ...user, accessToken}
+        const response =  _.pick({id: userObject._id.toString(),...userObject, accessToken}, USER_PICK_KEYS)
         
-        this.cacheManager.set(accessToken, JSON.stringify(response), parseInt(jwtExpireTime.toString()))
+        await this.cacheManager.set(accessToken, JSON.stringify(response), parseInt(this.configService.get('jwt.jwtExpireTime').toString()))
+        const cacheData = await this.cacheManager.get(accessToken)
         
         return response;
     }
@@ -51,6 +57,6 @@ export class AuthService {
 
         await this.cacheManager.del(accessToken)
 
-        return;
+        return {message: 'Log out successfully'};
     }
 }

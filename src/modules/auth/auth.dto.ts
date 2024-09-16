@@ -1,20 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
+import { PickType } from "@nestjs/swagger";
+import { UserRegiterRequestDdto } from "../user/user.dto";
 
-export class SignIdRequestDto {
-    @IsOptional()
-    @IsString()
-    @ApiProperty({
-        type: String,
-        description: 'username',
-      })
-    username: string;
-
-    @IsOptional()
-    @IsString()
-    @ApiProperty({
-        type: String,
-        description: 'password',
-      })
-    password: string;
-}
+export class SignIdRequestDto extends PickType(UserRegiterRequestDdto, ['username', 'password']) {}

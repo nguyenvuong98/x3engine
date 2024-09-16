@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-import {IsOptional, IsString, IsEmail, IsNotEmpty, IsEnum} from 'class-validator'
-import { ApiProperty } from '@nestjs/swagger';
+import { getNewTimeStamp} from '../../share/helper'
 import { UserRole, UserStatus } from './user.interface';
 import { DbModel } from 'src/share/constants';
 

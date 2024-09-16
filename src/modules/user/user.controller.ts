@@ -10,16 +10,16 @@ export class UserController {
 
     }
 
-    @ApiOperation({
-        operationId: 'Register user',
-        description: 'Register user',
-      })
-    @ApiResponse({ status: HttpStatus.OK, 
-        description: 'The user has been successfully created.', 
-        type: UserDto 
-    })
-    @Post()
-    registerUser(@Body() userRegister: UserRegiterRequestDdto) {
-        return this.userService.registerUser(userRegister)
-    }
+    // @ApiOperation({
+    //     operationId: 'Register user',
+    //     description: 'Register user',
+    //   })
+    // @ApiResponse({ status: HttpStatus.OK, 
+    //     description: 'The user has been successfully created.', 
+    //     type: () => UserDto 
+    // })
+    // @Post()
+    // registerUser(@Body() userRegister: UserRegiterRequestDdto) {
+    //     return this.userService.registerUser(userRegister)
+    // }
 }
