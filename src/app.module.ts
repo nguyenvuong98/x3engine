@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { AppMiddleware } from './middleware/app.middleware';
 import { AuthModule } from './modules/auth/auth.module';
+import { ProjectModule } from './modules/project/project.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { AuthModule } from './modules/auth/auth.module';
     CacheModule.register({
       isGlobal: true,
     }),
-    AuthModule
+    AuthModule,
+    ProjectModule
   ],
   controllers: [AppController],
   providers: [AppService],

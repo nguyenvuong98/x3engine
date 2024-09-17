@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserDto, UserRegiterRequestDdto } from './user.dto';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
@@ -29,7 +29,7 @@ export class UserService {
         const existUser = await this.userRepository.findOne(query)
 
         if (existUser) {
-            throw new Error('User exist')
+            throw new HttpException('User exist', HttpStatus.BAD_REQUEST)
         }
 
         //hasing

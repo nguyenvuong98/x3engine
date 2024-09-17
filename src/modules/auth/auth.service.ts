@@ -24,7 +24,7 @@ export class AuthService {
         if (!user?.passwordHash || !user?.isDelete || !user?.status) {
             throw new UnauthorizedException();
         }
-
+        user.status = UserStatus.ACTIVE
         const userObject = user.toObject()
         const mathPassword = await ComparePassword(request.password, user.passwordHash)
 
@@ -36,7 +36,7 @@ export class AuthService {
         const response =  _.pick({id: userObject._id.toString(),...userObject, accessToken}, USER_PICK_KEYS)
         
         await this.cacheManager.set(accessToken, JSON.stringify(response), parseInt(this.configService.get('jwt.jwtExpireTime').toString()))
-        const cacheData = await this.cacheManager.get(accessToken)
+        //const cacheData = await this.cacheManager.get(accessToken)
         
         return response;
     }
