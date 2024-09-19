@@ -4,20 +4,23 @@ import { Model } from "mongoose";
 import { DbModel } from "src/share/constants";
 import { UserDto } from "./user.dto";
 import { User } from "./user.schema";
+import { BaseRepository } from "src/share/base.repository";
 
 @Injectable()
-export class UserRepository {
-    constructor(@InjectModel(DbModel.USER)private model: Model<User>){}
-
-    async create(user: any) {
-        return this.model.create(user)
+export class UserRepository extends BaseRepository {
+    constructor(@InjectModel(DbModel.USER) model: Model<User>){
+        super(model)
     }
 
-    async update(user: UserDto) {
-        return this.model.updateOne(user)
-    }
+    // async create(user: any) {
+    //     return this.model.create(user)
+    // }
 
-    async findOne(user: any = {}) {
-        return this.model.findOne(user)
-    }
+    // async updateOne(queryuser: any) {
+    //     return this.model.updateOne(user)
+    // }
+
+    // async findOne(user: any = {}) {
+    //     return this.model.findOne(user)
+    // }
 }

@@ -12,7 +12,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService,
+    constructor(private userService: UserService,
         @Inject(CACHE_MANAGER) private cacheManager: Cache,
         private configService: ConfigService) {
         

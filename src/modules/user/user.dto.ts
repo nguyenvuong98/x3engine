@@ -1,6 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType, PickType } from '@nestjs/swagger';
 import {IsOptional, IsString, IsEmail, IsNotEmpty, IsEnum, MinLength} from 'class-validator'
 import { UserRole, UserStatus } from './user.interface';
+import { RoleDto } from '../roles/roles.dto';
 
 export class UserDto {
     @IsOptional()
@@ -145,4 +146,19 @@ export class UserRegiterRequestDdto {
         description: 'lastName',
       })
     lastName: string;
+
+    @ApiProperty({
+      type: [String],
+      description: 'permissionIds',
+    })
+    permissionIds: string[];
+}
+
+export class UserAddPermissionInput extends PickType(UserDto, ['email']) {
+  @IsNotEmpty({message:'permissionIds must be not empty'})
+  @ApiProperty({
+      type: [String],
+      description: 'permissionIds',
+    })
+  permissionIds: string[];
 }

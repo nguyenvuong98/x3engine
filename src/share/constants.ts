@@ -1,7 +1,7 @@
-import * as config from '../config/configuration'
 export enum DbModel {
     USER = 'User',
-    PROJECT = 'Project'
+    PROJECT = 'Project',
+    ROLES = 'Roles'
 }
 
 export const ACCESS_TOKEN_HEADER_NAME = 'access-token';

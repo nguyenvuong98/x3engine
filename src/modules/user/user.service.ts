@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserDto, UserRegiterRequestDdto } from './user.dto';
+import { UserAddPermissionInput, UserDto, UserRegiterRequestDdto } from './user.dto';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
 import { UserRole, UserStatus } from './user.interface';
@@ -9,6 +9,7 @@ import { Cache } from 'cache-manager'
 import { ConfigService } from '@nestjs/config';
 import * as _ from 'lodash'
 import { USER_PICK_KEYS } from './user.constants';
+import { RolesService } from '../roles/roles.service';
 
 @Injectable()
 export class UserService {
@@ -72,4 +73,22 @@ export class UserService {
         return accessToken
     }
 
+    async addPermission(input: UserAddPermissionInput) {
+        const user = await this.userRepository.findOne({email: input.email})
+
+        if (!user) {
+            throw new HttpException('User not exist', HttpStatus.BAD_REQUEST)
+        }
+
+        const queryUpdate = {
+            '$addToSet': {
+                permissionIds: {
+                    '$each': input.permissionIds
+                }
+            }
+        }
+        const updatePermission = await this.userRepository.updateOne({email: input.email}, queryUpdate)
+
+        return updatePermission;
+    }
 }

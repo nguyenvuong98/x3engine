@@ -9,6 +9,8 @@ import configuration from './config/configuration';
 import { AppMiddleware } from './middleware/app.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProjectModule } from './modules/project/project.module';
+import { RolesModule } from './modules/roles/roles.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -26,7 +28,9 @@ import { ProjectModule } from './modules/project/project.module';
       isGlobal: true,
     }),
     AuthModule,
-    ProjectModule
+    ProjectModule,
+    RolesModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],

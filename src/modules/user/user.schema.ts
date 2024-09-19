@@ -7,7 +7,7 @@ import { DbModel } from 'src/share/constants';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({collection: DbModel.USER})
+@Schema({collection: DbModel.USER, timestamps: true})
 export class User {
     @Prop()
     username: string;
@@ -33,14 +33,11 @@ export class User {
     @Prop()
     lastName: string;
 
+    @Prop()
+    permissions: string[];
+
     @Prop({default: 1}) // 1: active, 2:deleted
     isDelete: Number;
-
-    @Prop({default: getNewTimeStamp()})
-    createdAt: Number;
-
-    @Prop({default: getNewTimeStamp()})
-    updatedAt: Number;
 }
 
 
