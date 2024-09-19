@@ -1,5 +1,5 @@
 import { Body, Controller, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto, UserRegiterRequestDdto } from '../user/user.dto';
 import { UserService } from '../user/user.service';
 import { SignIdRequestDto } from './auth.dto';
@@ -9,6 +9,7 @@ import { ACCESS_TOKEN_HEADER_NAME } from 'src/share/constants';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
     constructor(private readonly userService: UserService,
                 private readonly authService: AuthService) {

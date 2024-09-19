@@ -4,14 +4,17 @@ import { Request } from 'express';
 import { ProjectService } from './project.service';
 import { USER_DETAIL_HEADER_NAME } from 'src/share/constants';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/decorators/roles.decorators';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth('access-token')
 @Controller('project')
+@ApiTags('Project')
 export class ProjectController {
     constructor(private readonly projectService: ProjectService) {}
 
+    @Roles(['admin'])
     @ApiOperation({
         operationId: 'Create project',
         description: 'Create project',

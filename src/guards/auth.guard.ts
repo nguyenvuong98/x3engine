@@ -54,6 +54,6 @@ export class AuthGuard implements CanActivate {
 
     if (!accessToken) { return null } 
     const [type, token] = accessToken.toString().split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    return type.toLowerCase() === 'bearer' ? token : undefined;
   }
 }

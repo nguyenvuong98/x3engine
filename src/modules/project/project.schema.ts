@@ -6,7 +6,7 @@ import { DbModel } from 'src/share/constants';
 
 export type UserDocument = HydratedDocument<Project>;
 
-@Schema({collection: DbModel.PROJECT})
+@Schema({collection: DbModel.PROJECT, timestamps: true})
 export class Project {
     @Prop()
     name: string;
@@ -16,12 +16,6 @@ export class Project {
 
     @Prop({default: 1}) // 1: active, 2:deleted
     isDelete: Number;
-
-    @Prop({default: getNewTimeStamp()})
-    createdAt: Number;
-
-    @Prop({default: getNewTimeStamp()})
-    updatedAt: Number;
 }
 
 
