@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserDto, UserRegiterRequestDdto } from './user.dto';
+import { UserAddPermissionInput, UserDto, UserRegiterRequestDdto } from './user.dto';
 import { UserService } from './user.service';
 
 @ApiTags('user')
@@ -10,16 +10,16 @@ export class UserController {
 
     }
 
-    // @ApiOperation({
-    //     operationId: 'Register user',
-    //     description: 'Register user',
-    //   })
-    // @ApiResponse({ status: HttpStatus.OK, 
-    //     description: 'The user has been successfully created.', 
-    //     type: () => UserDto 
-    // })
-    // @Post()
-    // registerUser(@Body() userRegister: UserRegiterRequestDdto) {
-    //     return this.userService.registerUser(userRegister)
-    // }
+    @ApiOperation({
+        operationId: 'Add permission',
+        description: 'Add permissionr',
+      })
+    @ApiResponse({ status: HttpStatus.OK, 
+        description: 'The permission has been successfully created.', 
+        type: () => UserDto 
+    })
+    @Post('/add-permission')
+    addPermissions(@Body() input: UserAddPermissionInput) {
+        return this.userService.addPermission(input)
+    }
 }

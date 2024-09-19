@@ -29,19 +29,21 @@ export class AuthGuard implements CanActivate {
 
         request[USER_PAYLOAD_HEADER_NAME] = payload;
         
-        const cacheAuthData = await this.cacheManager.get(token)
+        // const cacheAuthData = await this.cacheManager.get(token)
         
-        if (!cacheAuthData) {
-            throw new Error()
-        }
+        // if (!cacheAuthData) {
+        //     throw new Error()
+        // }
 
-        const parseAuth = JSON.parse(cacheAuthData.toString());
+        // const parseAuth = JSON.parse(cacheAuthData.toString());
 
-        if (!parseAuth.status) {
-            throw new Error()
-        }
+        // if (!parseAuth.status) {
+        //     throw new Error()
+        // }
 
-        request[USER_DETAIL_HEADER_NAME] = parseAuth;
+        //request[USER_DETAIL_HEADER_NAME] = parseAuth;
+        
+        request[USER_DETAIL_HEADER_NAME] = payload;
         request[ACCESS_TOKEN_HEADER_NAME] = token;
     } catch {
       throw new UnauthorizedException();

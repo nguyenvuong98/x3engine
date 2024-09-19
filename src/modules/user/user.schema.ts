@@ -33,6 +33,9 @@ export class User {
     @Prop()
     lastName: string;
 
+    @Prop()
+    permissions: string[];
+
     @Prop({default: 1}) // 1: active, 2:deleted
     isDelete: Number;
 }
