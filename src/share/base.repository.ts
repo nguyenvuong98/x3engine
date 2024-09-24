@@ -14,8 +14,12 @@ export class BaseRepository {
         return this.model.findOne(query);
     }
 
-    async updateOne(query= {}, data = {}) {
-        return this.model.updateOne(query, data);
+    async updateOne(query= {}, data = {}, option = {}) {
+        return this.model.updateOne(query, data, option);
+    }
+
+    async updateMany(query= {}, data = {}, option = {}) {
+        return this.model.updateMany(query, data, option);
     }
 
     async deleteMany(query= {}) {

@@ -21,10 +21,11 @@ export class AuthService {
     async SignIn(request: SignIdRequestDto):Promise<UserDto> {
         const user = await this.userService.findOne({username: request.username});
 
-        if (!user?.passwordHash || !user?.isDelete || !user?.status) {
+        if (!user?.passwordHash || !user?.isDelete) {
             throw new UnauthorizedException();
         }
         user.status = UserStatus.ACTIVE
+        user.save()
         const userObject = user.toObject()
         const mathPassword = await ComparePassword(request.password, user.passwordHash)
 

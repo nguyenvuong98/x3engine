@@ -6,15 +6,17 @@ import { USER_DETAIL_HEADER_NAME } from 'src/share/constants';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/decorators/roles.decorators';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { ProjectPermission } from 'src/share/roles';
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard,RolesGuard)
 @ApiBearerAuth('access-token')
 @Controller('project')
 @ApiTags('Project')
 export class ProjectController {
     constructor(private readonly projectService: ProjectService) {}
 
-    @Roles(['admin'])
+    @Roles([ProjectPermission.PROJECT_CREATE])
     @ApiOperation({
         operationId: 'Create project',
         description: 'Create project',
@@ -28,6 +30,7 @@ export class ProjectController {
         return this.projectService.createProject(req[USER_DETAIL_HEADER_NAME].id, projectReq.name)
     }
 
+    @Roles([ProjectPermission.PROJECT_UPDATE])
     @ApiOperation({
         operationId: 'Update project',
         description: 'Update project',
@@ -40,6 +43,7 @@ export class ProjectController {
         return this.projectService.updateProject(req[USER_DETAIL_HEADER_NAME].id, projectReq)
     }
 
+    @Roles([ProjectPermission.PROJECT_DELETE])
     @ApiOperation({
         operationId: 'Delete project',
         description: 'delete project',

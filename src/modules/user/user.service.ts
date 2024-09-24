@@ -9,7 +9,7 @@ import { Cache } from 'cache-manager'
 import { ConfigService } from '@nestjs/config';
 import * as _ from 'lodash'
 import { USER_PICK_KEYS } from './user.constants';
-import { RolesService } from '../roles/roles.service';
+import { ProjectPermission } from 'src/share/roles';
 
 @Injectable()
 export class UserService {
@@ -45,13 +45,13 @@ export class UserService {
             firstName: userRegister.firstName,
             middleName: userRegister.middleName,
             lastName: userRegister.lastName,
+            permissions: this.getDefaultPermission()
         }
 
         const user = await this.userRepository.create(newUser)
-        const userObject = user.toObject()
        
         const accessToken = await this.createToken(user)
-        const response =  _.pick({id: userObject._id.toString(),...userObject, accessToken}, USER_PICK_KEYS)
+        const response =  _.pick({id: user._id.toString(),...user, accessToken}, USER_PICK_KEYS)
         
         this.cacheManager.set(accessToken, JSON.stringify(response), parseInt(this.configService.get('jwt.jwtExpireTime').toString()))
 
@@ -63,11 +63,11 @@ export class UserService {
     }
 
     async createToken(user: any) {
-        if (!user || !user.username|| !user.passwordHash || !user.status ||!user.id) {
+        if (!user || !user.username|| !user.passwordHash || !user.status ||!user._id) {
             throw new UnauthorizedException()
         }
 
-        const payload = { userId: user.id, username: user.username, email: user.email};
+        const payload = { id: (user.id || user._id), username: user.username, email: user.email, permissions: user.permissions};
         const accessToken = await this.jwtService.signAsync(payload, {secret: this.configService.get('jwt.jwtSecretKey')})
 
         return accessToken
@@ -82,13 +82,23 @@ export class UserService {
 
         const queryUpdate = {
             '$addToSet': {
-                permissionIds: {
-                    '$each': input.permissionIds
+                permissions: {
+                    '$each': input.permissions
                 }
             }
         }
         const updatePermission = await this.userRepository.updateOne({email: input.email}, queryUpdate)
 
         return updatePermission;
+    }
+
+    getDefaultPermission() {
+        const defaultPermission = [
+            ProjectPermission.PROJECT_CREATE,
+            ProjectPermission.PROJECT_DELETE,
+            ProjectPermission.PROJECT_UPDATE
+        ]
+
+        return defaultPermission
     }
 }

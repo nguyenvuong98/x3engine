@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('x3gine');
+  app.setGlobalPrefix('x3ngine');
 
   const config = new DocumentBuilder()
     .setTitle('X3ngine swagger')
@@ -19,6 +19,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
   await app.listen(process.env.PORT);
 }
 bootstrap();

@@ -10,4 +10,5 @@ export const USER_PICK_KEYS = [
     'accessToken',
     'createdAt',
     'updatedAt',
+    'permissions'
 ]

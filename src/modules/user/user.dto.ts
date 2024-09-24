@@ -37,14 +37,6 @@ export class UserDto {
     status: UserStatus;
 
     @IsOptional()
-    @IsEnum(UserRole)
-    @ApiProperty({
-        enum: UserRole,
-        description: 'role',
-      })
-    role: UserRole;
-
-    @IsOptional()
     @IsString()
     @ApiProperty({
         type: String,
@@ -116,13 +108,6 @@ export class UserRegiterRequestDdto {
       })
     email: string;
 
-    @IsEnum(UserRole)
-    @ApiProperty({
-        enum: UserRole,
-        description: 'role',
-      })
-    role: UserRole;
-
     @IsOptional()
     @IsString()
     @ApiProperty({
@@ -147,18 +132,13 @@ export class UserRegiterRequestDdto {
       })
     lastName: string;
 
-    @ApiProperty({
-      type: [String],
-      description: 'permissionIds',
-    })
-    permissionIds: string[];
 }
 
 export class UserAddPermissionInput extends PickType(UserDto, ['email']) {
   @IsNotEmpty({message:'permissionIds must be not empty'})
   @ApiProperty({
       type: [String],
-      description: 'permissionIds',
+      description: 'permissions',
     })
-  permissionIds: string[];
+  permissions: string[];
 }
