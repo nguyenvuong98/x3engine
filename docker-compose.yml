@@ -3,8 +3,9 @@ services:
   x3ngine-api:
     build: .
     volumes:
-      - .:/usr/src/app  # Mount local source code to the container (for development)
+      # - .:/usr/src/app  # Mount local source code to the container (for development)
       - '/usr/src/app/node_modules'
+      - app-data:/usr/src/test-app
     environment:
       NODE_ENV: production
     networks:
@@ -19,6 +20,48 @@ services:
       - x3ngine-api  # Ensure Nginx starts after the Node.js app
     networks:
       - x3ngine-network
+  jenkins-docker:
+    image: docker:dind
+    container_name: jenkins-docker
+    privileged: true
+    networks:
+      x3ngine-network:
+        aliases:
+          - docker
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+      
+    ports:
+      - "2376:2376"
+    restart: unless-stopped
+  jenkins-blueocean:
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: jenkins-blueocean
+    user: root
+    restart: on-failure
+    networks:
+      - x3ngine-network
+    environment:
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: 1
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - app-data:/var/jenkins_home/workspace/x3ngine-api/dist
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+volumes:
+  jenkins-docker-certs:
+  jenkins-data:
+  app-data:
 networks:
   x3ngine-network:
     driver: bridge
