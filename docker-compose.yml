@@ -2,10 +2,12 @@ version: '3'
 services:
   x3ngine-api:
     build: .
+    env_file:
+      - .env
     volumes:
       # - .:/usr/src/app  # Mount local source code to the container (for development)
       - '/usr/src/app/node_modules'
-      - app-data:/usr/src/test-app
+      - jenkins-data:/usr/src/test-app
     environment:
       NODE_ENV: production
     networks:
@@ -33,7 +35,6 @@ services:
     volumes:
       - jenkins-docker-certs:/certs/client
       - jenkins-data:/var/jenkins_home
-      
     ports:
       - "2376:2376"
     restart: unless-stopped
@@ -54,7 +55,6 @@ services:
       - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      - app-data:/var/jenkins_home/workspace/x3ngine-api/dist
     ports:
       - "8080:8080"
       - "50000:50000"

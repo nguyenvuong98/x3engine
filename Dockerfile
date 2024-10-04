@@ -1,10 +1,13 @@
 FROM node:18-alpine
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
+WORKDIR /usr/src/test-app/workspace/x3ngine-api
 
 # Copy package.json and package-lock.json (if applicable)
 COPY package*.json ./
+
+COPY .env /usr/src/.env
 
 # Install dependencies
 RUN npm install
