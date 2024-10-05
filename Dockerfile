@@ -9,6 +9,7 @@ COPY package*.json ./
 
 COPY .env /usr/src/.env
 
+RUN npm install supervisor -g
 # Install dependencies
 RUN npm install
 
@@ -22,4 +23,4 @@ RUN npm run build
 EXPOSE 4000
 
 # Command to run the application
-CMD ["node", "dist/main.js"]  # Adjust according to your entry point
+CMD ["supervisor", "dist/main.js"]  # Adjust according to your entry point
