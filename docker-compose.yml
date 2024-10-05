@@ -8,6 +8,8 @@ services:
       # - .:/usr/src/app  # Mount local source code to the container (for development)
       - '/usr/src/app/node_modules'
       - jenkins-data:/usr/src/test-app
+    ports:
+      - "4000:4000"
     environment:
       NODE_ENV: production
     networks:

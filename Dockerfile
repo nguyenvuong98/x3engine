@@ -9,7 +9,7 @@ COPY package*.json ./
 
 COPY .env /usr/src/.env
 
-RUN npm install supervisor -g
+RUN npm install pm2@latest -g
 # Install dependencies
 RUN npm install
 
@@ -23,4 +23,5 @@ RUN npm run build
 EXPOSE 4000
 
 # Command to run the application
-CMD ["supervisor", "dist/main.js"]  # Adjust according to your entry point
+# CMD ["node", "dist/main.js"]
+CMD ["pm2-runtime","start", "dist/main.js", "--watch"]  # Adjust according to your entry point
