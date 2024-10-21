@@ -2,10 +2,24 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as basicAuth from "express-basic-auth";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const swUser = process.env.SWAGGER_USER || 'x3ngine';
+  const swPwd = process.env.SWAGGER_PWD || '123456'
+  const userSwgObj = {}
+  userSwgObj[swUser] = swPwd
+
   app.setGlobalPrefix('x3ngine');
+  app.use(
+    // Paths you want to protect with basic auth
+    "/api*",
+    basicAuth({
+      challenge: true,
+      users: userSwgObj
+    })
+  );
 
   const config = new DocumentBuilder()
     .setTitle('X3ngine swagger')
